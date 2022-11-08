@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  jenkins-dind:
+    image: docker:dind
+    networks:
+      - jenkins
+    privileged: true
+    ports:
+      - 2376:2376
+    volumes:
+      - jenkins-data:/var/jenkins_hom
+  jenkins-server:
+    build:
+      dockerfile: ./Dockerfile
+      context: ./
+    networks:
+      - jenkins
+    ports:
+      - 8080:8080
+      - 5000:5000
+    volumes:
+      - jenkins-data:/var/jenkins_home
+
+volumes:
+  jenkins-data:
+
+networks:
+  jenkins:
